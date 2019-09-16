@@ -1,17 +1,19 @@
 import java.util.*;
 import java.lang.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class Truck {
-    public static  AtomicInteger count = new AtomicInteger(0);
-    private final int id;
-    private int weight;
+    private  static AtomicInteger count = new AtomicInteger(0);
+    public final int id;
+    public int weight;
 
     public Truck(int weight) {
         this.weight = weight;
         this.id = count.incrementAndGet();
     }
 
-  public void getId(){
+  public int getId(){
       return id;
   }
 

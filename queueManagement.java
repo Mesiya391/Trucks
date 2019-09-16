@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.*;
 
 
 public class queueManagement {
@@ -18,7 +19,7 @@ public class queueManagement {
         if(q.isEmpty()){
             t = 0;
         } else {
-            t = q.stream().mapToObj( Truck -> Truck.weight.sum());
+            t = q.stream().mapToObj( Truck -> Truck.weight).sum();
         }
     return t;
     }
@@ -40,55 +41,70 @@ public class queueManagement {
        }
    }
 
-   public void swap(ArrayList<Truck> q1, ArrayList<Truck> q2,  int index ){
+   public void swap(ArrayList<Truck> q1, ArrayList<Truck> q2,  Integer index ){
        Truck tt = new Truck(1);
        tt = q1.get(index);
-       q1.get(index) = q2.get(index);
-       q2.get(index) = tt; 
+       q1.set(index, q2.get(index));
+       q2.set(index, tt); 
 
    }
 
-   public void waitingTime(int ID){
+   public Truck findById(int ID, ArrayList<Truck> q){
+       for(Truck truck : q){
+           if(truck.getId()==ID){
+               return truck;
+           }
+       } return null;
+   }
+
+   public int waitingTime(int ID){
        int tt=0;
        
-       Optional<Truck> matched = q1.stream().filter( t -> t::id).equals(ID).findFirst();
+       //Optional<Truck> matched = q1.stream().filter( t -> t.getId()).equals(ID).findFirst();
+       Truck matched = findById(ID, q1);
+       
+       
        if( matched != null){
-       int k = indexOf(matched);
+       int k = q1.indexOf(matched);
        for(int i=0; i<=k; i++){
          tt+= q1.get(i).getWeight();
        }
     }
        else {
-        Optional<Truck> matched2 = q2.stream().
-        filter( t -> t.id).equals(ID).findFirst();
-        int s = indexOf(matched2);
+        // Optional<Truck> matched2 = q2.stream().
+        // filter( t -> t.getId()).equals(ID).findFirst();
+        Truck matched2 = findById(ID, q2);
+        
+        if( matched2 != null){
+        int s = q2.indexOf(matched2);
         for(int j=0; j<=s; j++){
          tt+= q1.get(j).getWeight();
        }
     }
     return tt;
     }
+}
 
     public void step(){
         time++;
-        q1.get(0).getWeight()--;
-        q2.get(0).getWeight()--;
-        if(q1.get().getWeight()==0){
+        q1.get(0).weight--;
+        q2.get(0).weight--;
+        if(q1.get(0).getWeight()==0){
             int l = q1.size();
             Truck temp = new Truck(1);
             for(int i=1; i<l; i++){
-             q1.set(i-1, q1.get(i)) = q1.get(i);
+             q1.set(i-1, q1.get(i));
             }
         }
-        else if(q2.get().getWeight==0){
+        else if(q2.get(0).weight==0){
             int m = q2.size();
             Truck temp = new Truck(1);
-            for(int j=1; i<m; j++){
-             q2.set(j-1, q2.get(j)) = q2.get(j);
+            for(int j=1; j<m; j++){
+             q2.set(j-1, q2.get(j));
         }
     }
 
-        if(waitingTime2(q1>q2)){
+        if(waitingTime2(q1)>waitingTime2(q2)){
             ArrayList<Truck> c1 = q1.stream()
             .skip(1)
             .collect(Collectors.toList());
